@@ -1,0 +1,86 @@
+Certainly! Here's a simple implementation of a stopwatch web application using HTML, CSS, and JavaScript:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .stopwatch-container {
+            margin-top: 50px;
+        }
+        .time-display {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        .controls {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="stopwatch-container">
+        <div class="time-display" id="time-display">00:00:00</div>
+        <div class="controls">
+            <button id="start-btn" onclick="startStopwatch()">Start</button>
+            <button id="stop-btn" onclick="stopStopwatch()" disabled>Stop</button>
+            <button id="reset-btn" onclick="resetStopwatch()">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        let startTime;
+        let elapsedTime = 0;
+        let timerInterval;
+
+        function startStopwatch() {
+            startTime = Date.now() - elapsedTime;
+            timerInterval = setInterval(updateTimeDisplay, 10);
+            document.getElementById('start-btn').disabled = true;
+            document.getElementById('stop-btn').disabled = false;
+        }
+
+        function stopStopwatch() {
+            clearInterval(timerInterval);
+            document.getElementById('start-btn').disabled = false;
+            document.getElementById('stop-btn').disabled = true;
+        }
+
+        function resetStopwatch() {
+            clearInterval(timerInterval);
+            elapsedTime = 0;
+            updateTimeDisplay();
+            document.getElementById('start-btn').disabled = false;
+            document.getElementById('stop-btn').disabled = true;
+        }
+
+        function updateTimeDisplay() {
+            const currentTime = Date.now();
+            elapsedTime = currentTime - startTime;
+            const formattedTime = formatTime(elapsedTime);
+            document.getElementById('time-display').textContent = formattedTime;
+        }
+
+        function formatTime(time) {
+            const milliseconds = Math.floor(time % 1000 / 10);
+            const seconds = Math.floor(time / 1000 % 60);
+            const minutes = Math.floor(time / (1000 * 60) % 60);
+            const hours = Math.floor(time / (1000 * 60 * 60) % 24);
+
+            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(2, '0')}`;
+        }
+    </script>
+</body>
+</html>
